@@ -98,6 +98,10 @@ public:
             projTr_.val[v_i] *= z;
     }
 
+    CV_WRAP static Ptr<MapProjec> create();
+
+    CV_WRAP static Ptr<MapProjec> create(InputArray projTr);
+
 private:
     cv::Matx<double, 3, 3> projTr_;       /*< Projection matrix */
 };

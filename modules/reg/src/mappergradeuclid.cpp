@@ -129,5 +129,10 @@ cv::Ptr<Map> MapperGradEuclid::getMap() const
     return cv::Ptr<Map>(new MapAffine());
 }
 
+Ptr<MapperGradEuclid> MapperGradEuclid::create()
+{
+    return makePtr<MapperGradEuclid>();
+}
+
 
 }}  // namespace cv::reg
