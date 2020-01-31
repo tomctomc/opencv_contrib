@@ -110,5 +110,10 @@ cv::Ptr<Map> MapperGradShift::getMap() const
     return cv::Ptr<Map>(new MapShift());
 }
 
+Ptr<MapperGradShift> MapperGradShift::create()
+{
+    return makePtr<MapperGradShift>();
+}
+
 
 }}  // namespace cv::reg

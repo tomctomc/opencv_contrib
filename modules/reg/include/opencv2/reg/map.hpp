@@ -166,6 +166,8 @@ public:
      * \param[in] factor Expansion if bigger than one, compression if smaller than one
      */
     CV_WRAP virtual void scale(double factor) = 0;
+
+	CV_WRAP static Ptr<Map> create();
 };
 
 //! @}

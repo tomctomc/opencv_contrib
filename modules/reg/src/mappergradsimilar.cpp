@@ -144,5 +144,10 @@ cv::Ptr<Map> MapperGradSimilar::getMap() const
     return cv::Ptr<Map>(new MapAffine());
 }
 
+Ptr<MapperGradSimilar> MapperGradSimilar::create()
+{
+    return makePtr<MapperGradSimilar>();
+}
+
 
 }}  // namespace cv::reg
