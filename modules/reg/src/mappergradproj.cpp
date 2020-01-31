@@ -213,5 +213,10 @@ cv::Ptr<Map> MapperGradProj::getMap() const
     return cv::Ptr<Map>(new MapProjec());
 }
 
+Ptr<MapperGradProj> MapperGradProj::create()
+{
+    return makePtr<MapperGradProj>();
+}
+
 
 }}  // namespace cv::reg
