@@ -55,5 +55,11 @@ void Map::warp(InputArray img1, OutputArray img2) const
     invMap->inverseWarp(img1, img2);
 }
 
+Ptr<Map> Map::create()
+{
+	// this just returns a null pointer (create exists just to tag as "smartclass" for gen_java.py)
+    return Ptr<Map>( (Map *) 0 );
+}
+
 
 }}  // namespace cv::reg

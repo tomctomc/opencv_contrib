@@ -99,5 +99,11 @@ void Mapper::grid(const Mat& img, Mat& grid_r, Mat& grid_c) const
         fillGridMatrices<double>(img, grid_r, grid_c);
 }
 
+Ptr<Mapper> Mapper::create()
+{
+	// this just returns a null pointer (create exists just to tag as "smartclass" for gen_java.py)
+    return Ptr<Mapper>( (Mapper *) 0 );
+}
+
 
 }}  // namespace cv::reg

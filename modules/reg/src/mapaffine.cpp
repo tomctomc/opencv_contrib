@@ -111,5 +111,15 @@ void MapAffine::scale(double factor)
     shift_ *= factor;
 }
 
+Ptr<MapAffine> MapAffine::create()
+{
+    return makePtr<MapAffine>();
+}
+
+Ptr<MapAffine> MapAffine::create(InputArray linTr, InputArray shift)
+{
+    return makePtr<MapAffine>(linTr, shift);
+}
+
 
 }}  // namespace cv::reg

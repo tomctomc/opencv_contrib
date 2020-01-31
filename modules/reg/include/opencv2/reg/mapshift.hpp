@@ -90,6 +90,10 @@ public:
         Mat(shift_).copyTo(shift);
     }
 
+    CV_WRAP static Ptr<MapShift> create();
+
+    CV_WRAP static Ptr<MapShift> create(InputArray shift);
+
 private:
     cv::Vec<double, 2> shift_;      /*< Displacement */
 };

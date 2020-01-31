@@ -101,5 +101,10 @@ cv::Ptr<Map> MapperPyramid::getMap() const
     return cv::Ptr<Map>();
 }
 
+Ptr<MapperPyramid> MapperPyramid::create(Ptr<Mapper> baseMapper)
+{
+    return makePtr<MapperPyramid>(baseMapper);
+}
+
 
 }}  // namespace cv::reg

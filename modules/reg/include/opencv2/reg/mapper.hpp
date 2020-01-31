@@ -71,6 +71,8 @@ public:
      */
     CV_WRAP virtual cv::Ptr<Map> getMap() const = 0;
 
+	CV_WRAP static Ptr<Mapper> create();
+
 protected:
     /*
      * Calculates gradient and difference between images

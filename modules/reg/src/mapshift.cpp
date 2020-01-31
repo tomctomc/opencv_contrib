@@ -107,5 +107,15 @@ void MapShift::scale(double factor)
     shift_ *= factor;
 }
 
+Ptr<MapShift> MapShift::create()
+{
+    return makePtr<MapShift>();
+}
+
+Ptr<MapShift> MapShift::create(InputArray shift)
+{
+    return makePtr<MapShift>(shift);
+}
+
 
 }}  // namespace cv::reg

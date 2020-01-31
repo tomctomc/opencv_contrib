@@ -114,5 +114,14 @@ void MapProjec::scale(double factor)
     projTr_(2, 1) /= factor;
 }
 
+Ptr<MapProjec> MapProjec::create()
+{
+    return makePtr<MapProjec>();
+}
+
+Ptr<MapProjec> MapProjec::create(InputArray projTr)
+{
+    return makePtr<MapProjec>(projTr);
+}
 
 }}  // namespace cv::reg

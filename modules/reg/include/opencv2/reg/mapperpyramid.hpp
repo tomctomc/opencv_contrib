@@ -68,6 +68,8 @@ public:
     CV_PROP_RW int numLev_;           /*!< Number of levels of the pyramid */
     CV_PROP_RW int numIterPerScale_;  /*!< Number of iterations at a given scale of the pyramid */
 
+    CV_WRAP static Ptr<MapperPyramid> create(Ptr<Mapper> baseMapper);
+
 private:
     MapperPyramid& operator=(const MapperPyramid&);
     const Mapper& baseMapper_;  /*!< Mapper used in inner level */

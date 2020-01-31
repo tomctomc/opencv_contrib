@@ -162,5 +162,10 @@ cv::Ptr<Map> MapperGradAffine::getMap() const
     return cv::Ptr<Map>(new MapAffine());
 }
 
+Ptr<MapperGradAffine> MapperGradAffine::create()
+{
+    return makePtr<MapperGradAffine>();
+}
+
 
 }}  // namespace cv::reg

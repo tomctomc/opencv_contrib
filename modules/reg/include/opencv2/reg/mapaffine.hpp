@@ -101,6 +101,10 @@ public:
         Mat(shift_).copyTo(shift);
     }
 
+	CV_WRAP static Ptr<MapAffine> create();
+
+	CV_WRAP static Ptr<MapAffine> create(InputArray linTr, InputArray shift);
+
 private:
     cv::Matx<double, 2, 2> linTr_;
     cv::Vec<double, 2> shift_;
