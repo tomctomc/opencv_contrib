@@ -115,6 +115,24 @@ void cv::cuda::findMinMax(InputArray _src, OutputArray _dst, InputArray _mask, S
     syncOutput(dst, _dst, stream);
 }
 
+void cv::cuda::tomctomc_Modified_OpenCV_Required(void)
+{
+    // nothing to do - just used as a runtime check that these modifications are present
+}
+
+void cv::cuda::tomctomc_Modified_minMax(InputArray _src, double* minVal, double* maxVal, InputArray _mask, Stream &stream, GpuMat &gpuMat, Mat &cpuMat )
+{
+    findMinMax(_src, gpuMat, _mask, stream);
+
+    gpuMat.download(cpuMat,stream);
+
+    if (minVal)
+        *minVal = cpuMat.at<float>(0,0);
+
+    if (maxVal)
+        *maxVal = cpuMat.at<float>(0,1);
+}
+
 void cv::cuda::minMax(InputArray _src, double* minVal, double* maxVal, InputArray _mask)
 {
     Stream& stream = Stream::Null();
