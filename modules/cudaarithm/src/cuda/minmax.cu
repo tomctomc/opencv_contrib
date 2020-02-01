@@ -115,7 +115,7 @@ void cv::cuda::findMinMax(InputArray _src, OutputArray _dst, InputArray _mask, S
     syncOutput(dst, _dst, stream);
 }
 
-void cv::cuda::tomctomc_Modified_OpenCV_Required(void)
+void cv::cuda::tomctomc_Modified_OpenCV_Required()
 {
     // nothing to do - just used as a runtime check that these modifications are present
 }
