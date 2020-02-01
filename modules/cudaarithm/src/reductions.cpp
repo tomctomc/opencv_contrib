@@ -59,6 +59,7 @@ void cv::cuda::calcAbsSum(InputArray, OutputArray, InputArray, Stream&) { throw_
 Scalar cv::cuda::sqrSum(InputArray, InputArray) { throw_no_cuda(); return Scalar(); }
 void cv::cuda::calcSqrSum(InputArray, OutputArray, InputArray, Stream&) { throw_no_cuda(); }
 
+void cv::cuda::tomctomc_Modified_minMax(InputArray, double*, double*, InputArray, Stream&, cv::cuda::GpuMat, cv::Mat) { throw_no_cuda(); }
 void cv::cuda::minMax(InputArray, double*, double*, InputArray) { throw_no_cuda(); }
 void cv::cuda::findMinMax(InputArray, OutputArray, InputArray, Stream&) { throw_no_cuda(); }
 void cv::cuda::minMaxLoc(InputArray, double*, double*, Point*, Point*, InputArray) { throw_no_cuda(); }
@@ -161,8 +162,9 @@ void cv::cuda::meanStdDev(InputArray src, OutputArray dst, Stream& stream)
 
     NppStreamHandler h(StreamAccessor::getStream(stream));
 
+    if( src.type() == CV_8UC1 ) {
 #if (CUDA_VERSION <= 4020)
-    nppSafeCall( nppiMeanStdDev8uC1RGetBufferHostSize(sz, &bufSize) );
+        nppSafeCall( nppiMeanStdDev8uC1RGetBufferHostSize(sz, &bufSize) );
 #else
 #if USE_NPP_STREAM_CTX
     if (gsrc.type() == CV_8UC1)
@@ -176,6 +178,18 @@ void cv::cuda::meanStdDev(InputArray src, OutputArray dst, Stream& stream)
         nppSafeCall( nppiMeanStdDevGetBufferHostSize_32f_C1R(sz, &bufSize) );
 #endif
 #endif
+    }
+    else { // CV_32FC1
+#if (CUDA_VERSION <= 4020)
+        nppSafeCall( nppiMeanStdDev32fC1RGetBufferHostSize(sz, &bufSize) );
+#else
+#if USE_NPP_STREAM_CTX
+        nppSafeCall( nppiMeanStdDevGetBufferHostSize_32f_C1R_Ctx(sz, &bufSize, h) );
+#else
+        nppSafeCall( nppiMeanStdDevGetBufferHostSize_32f_C1R(sz, &bufSize) );
+#endif
+#endif
+    }
 
     BufferPool pool(stream);
     CV_Assert(bufSize <= std::numeric_limits<int>::max());
