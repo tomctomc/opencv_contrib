@@ -620,6 +620,8 @@ The function does not work with CV_64F images on GPUs with the compute capabilit
 
 @sa minMaxLoc
  */
+CV_EXPORTS_W void tomctomc_Modified_OpenCV_Required(void);
+CV_EXPORTS_W void tomctomc_Modified_minMax(InputArray _src, double* minVal, double* maxVal, InputArray _mask, Stream &stream, GpuMat &gpuMat, Mat &cpuMat );
 CV_EXPORTS_W void minMax(InputArray src, double* minVal, double* maxVal, InputArray mask = noArray());
 /** @overload */
 CV_EXPORTS_W void findMinMax(InputArray src, OutputArray dst, InputArray mask = noArray(), Stream& stream = Stream::Null());

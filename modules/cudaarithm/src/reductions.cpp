@@ -59,6 +59,7 @@ void cv::cuda::calcAbsSum(InputArray, OutputArray, InputArray, Stream&) { throw_
 Scalar cv::cuda::sqrSum(InputArray, InputArray) { throw_no_cuda(); return Scalar(); }
 void cv::cuda::calcSqrSum(InputArray, OutputArray, InputArray, Stream&) { throw_no_cuda(); }
 
+void cv::cuda::tomctomc_Modified_minMax(InputArray, double*, double*, InputArray, Stream&, cv::cuda::GpuMat, cv::Mat) { throw_no_cuda(); }
 void cv::cuda::minMax(InputArray, double*, double*, InputArray) { throw_no_cuda(); }
 void cv::cuda::findMinMax(InputArray, OutputArray, InputArray, Stream&) { throw_no_cuda(); }
 void cv::cuda::minMaxLoc(InputArray, double*, double*, Point*, Point*, InputArray) { throw_no_cuda(); }
@@ -139,7 +140,7 @@ void cv::cuda::meanStdDev(InputArray _src, OutputArray _dst, Stream& stream)
 
     const GpuMat src = getInputMat(_src, stream);
 
-    CV_Assert( src.type() == CV_8UC1 );
+    CV_Assert( src.type() == CV_8UC1 || src.type() == CV_32FC1 );
 
     GpuMat dst = getOutputMat(_dst, 1, 2, CV_64FC1, stream);
 
@@ -148,19 +149,33 @@ void cv::cuda::meanStdDev(InputArray _src, OutputArray _dst, Stream& stream)
     sz.height = src.rows;
 
     int bufSize;
+    if( src.type() == CV_8UC1 ) {
 #if (CUDA_VERSION <= 4020)
-    nppSafeCall( nppiMeanStdDev8uC1RGetBufferHostSize(sz, &bufSize) );
+        nppSafeCall( nppiMeanStdDev8uC1RGetBufferHostSize(sz, &bufSize) );
 #else
-    nppSafeCall( nppiMeanStdDevGetBufferHostSize_8u_C1R(sz, &bufSize) );
+        nppSafeCall( nppiMeanStdDevGetBufferHostSize_8u_C1R(sz, &bufSize) );
 #endif
+    }
+    else { // CV_32FC1
+#if (CUDA_VERSION <= 4020)
+        nppSafeCall( nppiMeanStdDev32fC1RGetBufferHostSize(sz, &bufSize) );
+#else
+        nppSafeCall( nppiMeanStdDevGetBufferHostSize_32f_C1R(sz, &bufSize) );
+#endif
+    }
 
     BufferPool pool(stream);
-    GpuMat buf = pool.getBuffer(1, bufSize, CV_8UC1);
+    GpuMat buf = pool.getBuffer(1, bufSize, src.type());
 
     // detail: https://github.com/opencv/opencv/issues/11063
     //NppStreamHandler h(StreamAccessor::getStream(stream));
 
-    nppSafeCall( nppiMean_StdDev_8u_C1R(src.ptr<Npp8u>(), static_cast<int>(src.step), sz, buf.ptr<Npp8u>(), dst.ptr<Npp64f>(), dst.ptr<Npp64f>() + 1) );
+    if( src.type() == CV_8UC1 ) {
+        nppSafeCall( nppiMean_StdDev_8u_C1R(src.ptr<Npp8u>(), static_cast<int>(src.step), sz, buf.ptr<Npp8u>(), dst.ptr<Npp64f>(), dst.ptr<Npp64f>() + 1) );
+    }
+    else { // CV_32FC1
+        nppSafeCall( nppiMean_StdDev_32f_C1R(src.ptr<Npp32f>(), static_cast<int>(src.step), sz, buf.ptr<Npp8u>(), dst.ptr<Npp64f>(), dst.ptr<Npp64f>() + 1) );
+    }
 
     syncOutput(dst, _dst, stream);
 }

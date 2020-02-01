@@ -82,6 +82,8 @@ namespace
         GpuMat buf_;
         GpuMat eig_;
         GpuMat tmpCorners_;
+        GpuMat minmax_gpu;
+           Mat minmax_cpu;
     };
 
     GoodFeaturesToTrackDetector::GoodFeaturesToTrackDetector(int srcType, int maxCorners, double qualityLevel, double minDistance,
@@ -108,7 +110,7 @@ namespace
         cornerCriteria_->compute(image, eig_, stream);
 
         double maxVal = 0;
-        cuda::minMax(eig_, 0, &maxVal);
+        tomctomc_Modified_minMax(eig_, 0, &maxVal,_mask,stream,minmax_gpu,minmax_cpu);
         cudaStream_t stream_ = StreamAccessor::getStream(stream);
         ensureSizeIsEnough(1, std::max(1000, static_cast<int>(image.size().area() * 0.05)), CV_32FC2, tmpCorners_);
 
