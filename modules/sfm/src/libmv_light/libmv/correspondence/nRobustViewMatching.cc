@@ -52,6 +52,7 @@ nRobustViewMatching::nRobustViewMatching(
  */
 bool nRobustViewMatching::computeData(const string & filename)
 {
+LOG(FATAL) << "TOMCXXX: LINKER ERROR HERE"; return false;
   cv::Mat im_cv = cv::imread(filename, 0);
   if (im_cv.empty()) {
     LOG(FATAL) << "Failed loading image: " << filename;
